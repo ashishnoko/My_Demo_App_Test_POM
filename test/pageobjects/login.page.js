@@ -1,14 +1,16 @@
-const { $ } = require('@wdio/globals')
+const { $, browser } = require('@wdio/globals')
 const Page = require('./page');
 
 
-class LoginPage extends Page {
+class MyDemoApp extends Page {
     /**
      * define selectors using getter methods
      */
   
     //First Products
-    get products(){ return $('//android.widget.TextView[@content-desc="store item text" and @text="Sauce Labs Backpack"]')}
+    get product(){return $('//android.widget.TextView[@content-desc="store item text" and @text="Sauce Labs Backpack"]')}
+
+
     get star(){ return $('(//android.widget.TextView[@text="󰓏"])[5]')}
     get circle(){ return $('//android.widget.TextView[@content-desc="store item text" and @text="Sauce Labs Backpack"]')}
     get counter_plus(){ return $('//android.widget.TextView[@content-desc="store item text" and @text="Sauce Labs Backpack"]')}
@@ -20,7 +22,7 @@ class LoginPage extends Page {
     get click_hamicon(){return $('//android.view.ViewGroup[@content-desc="open menu"]/android.widget.ImageView')}
     
     //Webview Locators
-    get webview(){ return $('//android.widget.TextView[@text="Products"]')}
+    get webview(){ return $('~menu item webview')}
     get url_input_field(){ return $('//android.widget.EditText[@content-desc="URL input field"]')}
     get go_to_site_btn(){ return $('//android.widget.TextView[@text="Go To Site"] ')}
 
@@ -39,7 +41,7 @@ class LoginPage extends Page {
 
     //About
 
-    get about(){return$('//android.view.ViewGroup[@content-desc="menu item about"]')}
+    get about(){return $('//android.view.ViewGroup[@content-desc="menu item about"]')}
 
 
     //Reset App state 
@@ -154,42 +156,81 @@ class LoginPage extends Page {
     get soundoff(){return $('//android.widget.TextView[@text=""]')}
 
     
-
-
-
-
-
-
-
-
-
-
- 
-
-    
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-    /**
-     * a method to encapsule automation code to interact with the page
-     * e.g. to login using username and password
-     */
     async login (username, password) {
+        
         await this.username.setValue(username);
         await this.password.setValue(password);
         await this.login_btn.click();
+        await browser.pause(2000);
+    }
+
+    async menu(){
+        await this.click_hamicon.click()
+    }
+
+    async web_view(){
+        await this.click_hamicon.click()
+        await browser.pause(3000)
+        await this.webview.click()
+        await browser.pause(3000)
+        await this.url_input_field.setValue('www.google.com')
+        await this.go_to_site_btn.click()
+        await browser.pause(3000)
+    }
+
+    async qrscanner(){
+        await this.qr_scanner.click()
+
+    }
+
+    async geolocation(){
+        await this.geo_location.click()
+        await this.start_observing.click()
+        await this.stop_observing.click()
+        await browser.pause(5000)
+    }
+
+    async fingerprint(){
+        await browser.pause(3000)
+        await this.finger_print.click()
+        await this.allow_login.click()
+        await browser.pause(3000)
+    }
+
+    async cart(){
+        await this.product.click()
+        await browser.pause(3000)
+        await this.addtocart.click()
+        await this.cart_icon.click()
+        await browser.pause(3000)
+        await this.proceed_to_checkout.click()
+        await browser.pause(3000)
+        
+    }
+
+    async abo_ut(){
+        await this.about.click()
+
+    }
+
+    async loginNavbar(){
+
+        await this.log_in.click()
+
+    }
+   
+    
+
+    async checkout(fullname,addressline1,addressline2,city,state_region,zip_code,country){
+        await this.fullname.setValue(fullname);
+        await this.addressline1.setValue(addressline1)
+        await this.addressline2.setValue(addressline2)
+        await this.city.setValue(city);
+        await this.state_region.setValue(state_region);
+        await this.zip_code.setValue(zip_code);
+        await this.country.setValue(country)
+        await this.payment.click()
+    
     }
 
     /**
@@ -200,4 +241,4 @@ class LoginPage extends Page {
     }
 }
 
-module.exports = new LoginPage();
+module.exports = new MyDemoApp();
